@@ -15,7 +15,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'your-secret-key-here')
 DEBUG = False
 
 # Add your website address here
-ALLOWED_HOSTS = ['school-reporting.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['green-bells-academy-report-system.onrender.com', 'localhost', '127.0.0.1', '.onrender.com']
 
 # Application definition
 INSTALLED_APPS = [
