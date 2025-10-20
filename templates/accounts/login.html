@@ -1,0 +1,374 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="login-container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+        <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+            <!-- Login Card -->
+            <div class="card login-card shadow-lg border-0">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <div class="login-icon mb-3">
+                        <i class="fas fa-user-shield fa-3x"></i>
+                    </div>
+                    <h2 class="mb-0 fw-bold">Welcome Back</h2>
+                    <p class="mb-0 opacity-75">Sign in to your account</p>
+                </div>
+                
+                <div class="card-body p-4 p-md-5">
+                    <form method="post" class="login-form">
+                        {% csrf_token %}
+                        
+                        <!-- Error Messages -->
+                        {% if form.errors %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <span>Your username and password didn't match. Please try again.</span>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endif %}
+
+                        <!-- Username Field -->
+                        <div class="form-group mb-4">
+                            <label for="id_username" class="form-label fw-semibold">
+                                <i class="fas fa-user me-2 text-primary"></i>Username
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0">
+                                    <i class="fas fa-user text-muted"></i>
+                                </span>
+                                <input type="text" 
+                                       name="username" 
+                                       class="form-control border-start-0 ps-2" 
+                                       id="id_username" 
+                                       placeholder="Enter your username"
+                                       required
+                                       autocomplete="username"
+                                       autofocus>
+                            </div>
+                            <div class="form-text">Enter your registered username</div>
+                        </div>
+
+                        <!-- Password Field -->
+                        <div class="form-group mb-4">
+                            <label for="id_password" class="form-label fw-semibold">
+                                <i class="fas fa-lock me-2 text-primary"></i>Password
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0">
+                                    <i class="fas fa-key text-muted"></i>
+                                </span>
+                                <input type="password" 
+                                       name="password" 
+                                       class="form-control border-start-0 ps-2" 
+                                       id="id_password" 
+                                       placeholder="Enter your password"
+                                       required
+                                       autocomplete="current-password">
+                                <button type="button" class="btn btn-outline-secondary toggle-password" data-target="id_password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="form-text">Must be at least 8 characters long</div>
+                        </div>
+
+                        <!-- Remember Me & Forgot Password -->
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="rememberMe">
+                                <label class="form-check-label text-muted small" for="rememberMe">
+                                    Remember me
+                                </label>
+                            </div>
+                            <a href="#" class="text-decoration-none small text-primary">
+                                Forgot Password?
+                            </a>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary btn-lg w-100 py-3 mb-4 login-btn">
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            Sign In
+                            <span class="spinner-border spinner-border-sm ms-2 d-none" role="status"></span>
+                        </button>
+                    </form>
+
+                    <!-- Divider -->
+                    <div class="divider d-flex align-items-center my-4">
+                        <div class="line flex-grow-1 bg-light"></div>
+                        <div class="px-3 text-muted small">OR</div>
+                        <div class="line flex-grow-1 bg-light"></div>
+                    </div>
+
+                    <!-- Registration Link -->
+                    <div class="text-center">
+                        <p class="mb-2 text-muted">Don't have an account?</p>
+                        <a href="{% url 'register' %}" class="btn btn-outline-primary btn-hover">
+                            <i class="fas fa-user-plus me-2"></i>
+                            Create New Account
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Info -->
+            <div class="text-center mt-4">
+                <p class="text-muted small">
+                    <i class="fas fa-shield-alt me-1"></i>
+                    Your data is securely encrypted and protected
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Custom CSS for Login Page */
+.login-container {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px 0;
+}
+
+.login-card {
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.login-card .card-header {
+    border-radius: 0 !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.login-icon {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.form-group {
+    position: relative;
+}
+
+.input-group-text {
+    border-radius: 10px 0 0 10px !important;
+    border-right: none !important;
+}
+
+.form-control {
+    border-radius: 0 10px 10px 0 !important;
+    border-left: none !important;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    border-color: #667eea;
+}
+
+.login-btn {
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.login-btn:active {
+    transform: translateY(0);
+}
+
+.btn-hover {
+    transition: all 0.3s ease;
+    border-radius: 10px;
+}
+
+.btn-hover:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.toggle-password {
+    border-radius: 0 10px 10px 0;
+    border-left: none;
+}
+
+.divider .line {
+    height: 1px;
+    background: #dee2e6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 10px;
+    }
+    
+    .login-card .card-body {
+        padding: 2rem !important;
+    }
+    
+    .card-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .login-icon i {
+        font-size: 2.5rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .login-card .card-body {
+        padding: 1.5rem !important;
+    }
+    
+    .btn-lg {
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+    }
+    
+    .card-header {
+        padding: 2rem 1rem !important;
+    }
+}
+
+@media (max-width: 400px) {
+    .login-container {
+        padding: 5px;
+    }
+    
+    .login-card .card-body {
+        padding: 1rem !important;
+    }
+    
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .login-card {
+        background: rgba(33, 37, 41, 0.95);
+        color: #fff;
+    }
+    
+    .form-control {
+        background-color: #495057;
+        border-color: #6c757d;
+        color: #fff;
+    }
+    
+    .input-group-text {
+        background-color: #495057;
+        border-color: #6c757d;
+        color: #fff;
+    }
+    
+    .text-muted {
+        color: #adb5bd !important;
+    }
+}
+
+/* Loading states */
+.btn.loading .spinner-border {
+    display: inline-block !important;
+}
+
+/* Focus states for accessibility */
+.form-control:focus,
+.btn:focus {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .login-card {
+        border: 2px solid #000;
+    }
+    
+    .btn-primary {
+        background-color: #000;
+        border-color: #000;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Password visibility toggle
+    const toggleButtons = document.querySelectorAll('.toggle-password');
+    
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const passwordInput = document.getElementById(targetId);
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    });
+    
+    // Form submission loading state
+    const loginForm = document.querySelector('.login-form');
+    const submitBtn = loginForm.querySelector('.login-btn');
+    const spinner = submitBtn.querySelector('.spinner-border');
+    
+    loginForm.addEventListener('submit', function() {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('loading');
+        spinner.classList.remove('d-none');
+    });
+    
+    // Auto-focus username field
+    const usernameField = document.getElementById('id_username');
+    if (usernameField) {
+        usernameField.focus();
+    }
+    
+    // Input validation styling
+    const inputs = document.querySelectorAll('input[required]');
+    inputs.forEach(input => {
+        input.addEventListener('invalid', function() {
+            this.classList.add('is-invalid');
+        });
+        
+        input.addEventListener('input', function() {
+            if (this.checkValidity()) {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+            } else {
+                this.classList.remove('is-valid');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

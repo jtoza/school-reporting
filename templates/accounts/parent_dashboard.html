@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Parent Dashboard</h2>
+            <span class="badge bg-primary">Welcome, {{ user.get_full_name|default:user.username }}</span>
+        </div>
+        
+        {% if students %}
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">My Children</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                {% for student in students %}
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">{{ student.first_name }} {{ student.last_name }}</h5>
+                                            <p class="card-text">
+                                                <strong>Student ID:</strong> {{ student.student_id }}<br>
+                                                <strong>Class:</strong> {{ student.school_class.name }}<br>
+                                                <strong>Year:</strong> {{ student.school_class.academic_year }}
+                                            </p>
+                                            <div class="btn-group">
+                                                <a href="{% url 'reports:student_results' student.id %}" class="btn btn-sm btn-primary">View Results</a>
+                                                <a href="{% url 'reports:download_report' student.id %}" class="btn btn-sm btn-success">Download Report</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <h5>No Students Linked</h5>
+                <p>No students are currently linked to your account. Please contact the school administrator to link your children.</p>
+            </div>
+        {% endif %}
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">View Results</h5>
+                        <p class="card-text">Check your children's academic performance</p>
+                        {% if students %}
+                            <a href="{% url 'reports:student_results' students.0.id %}" class="btn btn-primary">View Results</a>
+                        {% else %}
+                            <button class="btn btn-primary" disabled>View Results</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Download Reports</h5>
+                        <p class="card-text">Download printable report cards</p>
+                        {% if students %}
+                            <a href="{% url 'reports:download_report' students.0.id %}" class="btn btn-success">Download Reports</a>
+                        {% else %}
+                            <button class="btn btn-success" disabled>Download Reports</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

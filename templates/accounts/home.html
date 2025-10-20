@@ -1,0 +1,640 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Green Bells Academy - Excellence in Education{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center min-vh-80">
+            <div class="col-lg-6">
+                <div class="hero-content">
+                    <div class="badge badge-accent mb-3">
+                        <i class="fas fa-star me-2"></i>Established 1985
+                    </div>
+                    <h1 class="hero-title">Welcome to <span class="text-gradient">Green Bells Academy</span></h1>
+                    <p class="hero-subtitle">Where excellence meets innovation in education. Nurturing young minds for a brighter future through comprehensive learning and holistic development.</p>
+                    <div class="hero-stats row mt-4">
+                        <div class="col-4">
+                            <div class="stat-item">
+                                <h3>98%</h3>
+                                <p>Success Rate</p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-item">
+                                <h3>500+</h3>
+                                <p>Students</p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-item">
+                                <h3>25+</h3>
+                                <p>Years Experience</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hero-buttons mt-4">
+                        <a href="{% url 'register' %}" class="btn btn-primary btn-lg me-3">
+                            <i class="fas fa-user-plus me-2"></i>Join Our Community
+                        </a>
+                        <a href="#features" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-play-circle me-2"></i>Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-image">
+                    <div class="floating-elements">
+                        <div class="floating-element element-1">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="floating-element element-2">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="floating-element element-3">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="floating-element element-4">
+                            <i class="fas fa-microscope"></i>
+                        </div>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+                         alt="Green Bells Academy Students" class="img-fluid rounded-3 shadow-lg">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="features-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Why Choose Green Bells Academy?</h2>
+            <p class="section-subtitle">Discover what makes us the preferred choice for quality education</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon bg-primary">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4>Advanced Reporting</h4>
+                    <p>Real-time academic tracking with detailed analytics and comprehensive progress reports for students and parents.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon bg-success">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h4>Expert Faculty</h4>
+                    <p>Our certified teachers and staff are dedicated to providing personalized attention and quality education.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon bg-warning">
+                        <i class="fas fa-laptop"></i>
+                    </div>
+                    <h4>Modern Technology</h4>
+                    <p>State-of-the-art facilities and digital learning tools to prepare students for the future.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Role Selection Section -->
+<section class="role-section py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Join Our Educational Community</h2>
+            <p class="section-subtitle">Choose your role to get started with Green Bells Academy</p>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-6 mb-4">
+                <div class="role-card teacher-card">
+                    <div class="card-header">
+                        <div class="role-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <h3>For Teachers</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check text-success me-2"></i>Manage multiple classes efficiently</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Enter and track assessment results</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Generate comprehensive reports</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Communicate with parents seamlessly</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Monitor student progress in real-time</li>
+                        </ul>
+                        <div class="text-center mt-4">
+                            <a href="{% url 'register' %}" class="btn btn-primary btn-lg w-100">
+                                <i class="fas fa-user-plus me-2"></i>Register as Teacher
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 col-md-6 mb-4">
+                <div class="role-card parent-card">
+                    <div class="card-header">
+                        <div class="role-icon">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        <h3>For Parents</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check text-success me-2"></i>View children's academic progress</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Download detailed report cards</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Receive timely notifications</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Communicate with teachers directly</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Track attendance and performance</li>
+                        </ul>
+                        <div class="text-center mt-4">
+                            <a href="{% url 'register' %}" class="btn btn-success btn-lg w-100">
+                                <i class="fas fa-user-plus me-2"></i>Register as Parent
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">What Our Community Says</h2>
+            <p class="section-subtitle">Hear from teachers and parents about their experience</p>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"The reporting system has transformed how I track my students' progress. It's intuitive and saves me hours of work each week."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Sarah Johnson">
+                        <div>
+                            <h5>Hesbon Kareithi</h5>
+                            <p>Mathematics Teacher</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"As a parent, I love being able to see my child's progress in real-time. The report cards are detailed and easy to understand."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1551836026-d5c88ac5c73d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Michael Chen">
+                        <div>
+                            <h5>Ruth Gitone</h5>
+                            <p>Parent of Grade 5 Student</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"Green Bells Academy provides excellent tools for communication between teachers and parents. It's made collaboration seamless."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Dr. Emily Rodriguez">
+                        <div>
+                            <h5>Tr.James.N.Njuguna</h5>
+                            <p>Science Department Head</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h2 class="cta-title">Ready to Join Green Bells Academy?</h2>
+                <p class="cta-subtitle">Start your journey with us today and experience the difference in educational excellence.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <div class="cta-buttons">
+                    <a href="{% url 'register' %}" class="btn btn-light btn-lg me-2">
+                        <i class="fas fa-user-plus me-2"></i>Create Account
+                    </a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Green Bells Academy Color Scheme */
+:root {
+    --academy-green: #2e8b57;
+    --academy-dark-green: #1e6b4e;
+    --academy-light-green: #48c78e;
+    --academy-gold: #ffd700;
+    --academy-light: #f8fff8;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, var(--academy-light) 0%, #ffffff 100%);
+    padding: 4rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.min-vh-80 {
+    min-height: 80vh;
+}
+
+.hero-content {
+    padding-right: 2rem;
+}
+
+.badge-accent {
+    background: linear-gradient(135deg, var(--academy-gold) 0%, #ffed4a 100%);
+    color: #000;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-block;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, var(--academy-green) 0%, var(--academy-dark-green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-subtitle {
+    font-size: 1.3rem;
+    color: #666;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.hero-stats {
+    margin: 2rem 0;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+}
+
+.stat-item h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--academy-green);
+    margin-bottom: 0.5rem;
+}
+
+.stat-item p {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.hero-image {
+    position: relative;
+}
+
+.hero-image img {
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.floating-elements {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.floating-element {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    font-size: 1.5rem;
+    color: var(--academy-green);
+    animation: float 6s ease-in-out infinite;
+}
+
+.element-1 { top: 10%; left: -5%; animation-delay: 0s; }
+.element-2 { top: 60%; left: -8%; animation-delay: 2s; }
+.element-3 { top: 20%; right: -5%; animation-delay: 4s; }
+.element-4 { top: 70%; right: -8%; animation-delay: 1s; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(10deg); }
+}
+
+/* Sections Common Styles */
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--academy-dark-green);
+}
+
+.section-subtitle {
+    font-size: 1.2rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Features Section */
+.features-section {
+    background: white;
+}
+
+.feature-card {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.feature-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2rem;
+    color: white;
+}
+
+.feature-card h4 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--academy-dark-green);
+}
+
+.feature-card p {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Role Cards */
+.role-card {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    height: 100%;
+}
+
+.role-card:hover {
+    transform: translateY(-10px);
+}
+
+.role-card .card-header {
+    background: linear-gradient(135deg, var(--academy-green) 0%, var(--academy-dark-green) 100%);
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    border: none;
+}
+
+.role-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.role-card h3 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.role-card .card-body {
+    padding: 2rem;
+}
+
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.feature-list li {
+    padding: 0.5rem 0;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+/* Testimonials */
+.testimonials-section {
+    background: var(--academy-light);
+}
+
+.testimonial-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+}
+
+.testimonial-content {
+    font-style: italic;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.testimonial-content::before {
+    content: """;
+    font-size: 4rem;
+    color: var(--academy-light-green);
+    position: absolute;
+    top: -1rem;
+    left: -0.5rem;
+    opacity: 0.3;
+    font-family: Georgia, serif;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.testimonial-author img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.testimonial-author h5 {
+    margin: 0;
+    color: var(--academy-dark-green);
+    font-weight: 600;
+}
+
+.testimonial-author p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* CTA Section */
+.cta-section {
+    background: linear-gradient(135deg, var(--academy-green) 0%, var(--academy-dark-green) 100%);
+}
+
+.cta-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.cta-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-content {
+        padding-right: 0;
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+    
+    .hero-buttons {
+        justify-content: center;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .floating-element {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+    
+    .cta-section .row {
+        text-align: center;
+    }
+    
+    .cta-buttons {
+        margin-top: 1.5rem;
+        text-align: center !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .stat-item h3 {
+        font-size: 1.5rem;
+    }
+    
+    .hero-buttons .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Button Enhancements */
+.btn-primary {
+    background: linear-gradient(135deg, var(--academy-green) 0%, var(--academy-dark-green) 100%);
+    border: none;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(46, 139, 87, 0.3);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--academy-light-green) 0%, var(--academy-green) 100%);
+    border: none;
+    font-weight: 600;
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(72, 199, 142, 0.3);
+}
+</style>
+{% endblock %}

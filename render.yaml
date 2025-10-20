@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: school-reporting
+    env: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn school_reporting.wsgi:application"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
+
+databases:
+  - name: school-reporting-db
+    plan: free

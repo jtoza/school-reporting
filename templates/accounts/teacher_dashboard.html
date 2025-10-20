@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Teacher Dashboard</h2>
+            <span class="badge bg-primary">Welcome, {{ user.get_full_name|default:user.username }}</span>
+        </div>
+        
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card text-white bg-primary">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ classes.count }}</h5>
+                        <p class="card-text">Classes</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-success">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ total_students }}</h5>
+                        <p class="card-text">Students</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-info">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ total_results }}</h5>
+                        <p class="card-text">Results Entered</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-warning">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ classes.0.academic_year.name }}</h5>
+                        <p class="card-text">Current Year</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {% if classes %}
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">My Classes</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Class Name</th>
+                                            <th>Academic Year</th>
+                                            <th>Number of Students</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for class in classes %}
+                                        <tr>
+                                            <td>{{ class.name }}</td>
+                                            <td>{{ class.academic_year }}</td>
+                                            <td>{{ class.student_set.count }}</td>
+                                            <td>
+                                                <a href="{% url 'reports:class_detail' class.id %}" class="btn btn-sm btn-primary">View Class</a>
+                                                <a href="{% url 'reports:add_student' class.id %}" class="btn btn-sm btn-success">Add Students</a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <h5>No Classes Assigned</h5>
+                <p>You haven't been assigned to any classes yet. Please contact the administrator.</p>
+            </div>
+        {% endif %}
+        
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Manage Classes</h5>
+                        <p class="card-text">View and manage your assigned classes</p>
+                        {% if classes %}
+                            <a href="{% url 'reports:class_detail' classes.0.id %}" class="btn btn-primary">View Classes</a>
+                        {% else %}
+                            <button class="btn btn-primary" disabled>View Classes</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Add Students</h5>
+                        <p class="card-text">Add new students to your classes</p>
+                        {% if classes %}
+                            <a href="{% url 'reports:add_student' classes.0.id %}" class="btn btn-success">Add Students</a>
+                        {% else %}
+                            <button class="btn btn-success" disabled>Add Students</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Enter Results</h5>
+                        <p class="card-text">Enter assessment results for students</p>
+                        {% if classes %}
+                            <a href="{% url 'reports:class_detail' classes.0.id %}" class="btn btn-info">Enter Results</a>
+                        {% else %}
+                            <button class="btn btn-info" disabled>Enter Results</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

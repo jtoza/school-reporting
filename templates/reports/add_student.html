@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'teacher_dashboard' %}">Teacher Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'reports:class_detail' school_class.id %}">{{ school_class.name }}</a></li>
+                <li class="breadcrumb-item active">Add Student</li>
+            </ol>
+        </nav>
+
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Add New Student</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <strong>Class:</strong> {{ school_class.name }}<br>
+                    <strong>Academic Year:</strong> {{ school_class.academic_year }}
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="id_student_id" class="form-label">Student ID *</label>
+                                <input type="text" name="student_id" class="form-control" required id="id_student_id">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="id_date_of_birth" class="form-label">Date of Birth *</label>
+                                <input type="date" name="date_of_birth" class="form-control" required id="id_date_of_birth">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="id_first_name" class="form-label">First Name *</label>
+                                <input type="text" name="first_name" class="form-control" required id="id_first_name">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="id_last_name" class="form-label">Last Name *</label>
+                                <input type="text" name="last_name" class="form-control" required id="id_last_name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_user" class="form-label">Link to Parent Account (Optional)</label>
+                        <select name="user" class="form-select" id="id_user">
+                            <option value="">No parent linked</option>
+                            {% for parent in form.fields.user.queryset %}
+                                <option value="{{ parent.id }}">{{ parent.username }} ({{ parent.get_full_name }})</option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-text">If the parent already has an account, you can link the student to it.</div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'reports:class_detail' school_class.id %}" class="btn btn-secondary me-md-2">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Add Student</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
