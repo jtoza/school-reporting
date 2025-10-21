@@ -458,6 +458,20 @@
                             </a>
                         {% endif %}
                         
+                        <!-- Assignments Link for both teachers and parents -->
+                        <a class="nav-link {% if 'assignment' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'reports:assignment_list' %}">
+                            <i class="fas fa-tasks me-1"></i>
+                            <span class="nav-text">Assignments</span>
+                        </a>
+                        
+                        <!-- Student Contacts Link for teachers only -->
+                        {% if user.is_teacher %}
+                        <a class="nav-link {% if 'student_contact' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'reports:student_contact_home' %}">
+                            <i class="fas fa-address-book me-1"></i>
+                            <span class="nav-text">Student Contacts</span>
+                        </a>
+                        {% endif %}
+                        
                         <a class="nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'profile' %}">
                             <i class="fas fa-user-circle me-1"></i>
                             <span class="nav-text">Profile</span>

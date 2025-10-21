@@ -3,8 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
 from django.utils import timezone
-from .models import SchoolClass, Student, AssessmentResult, AcademicYear, Subject
-from .forms import AssessmentResultForm, StudentForm
+from django.db.models import Q
+from .models import SchoolClass, Student, AssessmentResult, AcademicYear, Subject, SubjectAssignment, AssignmentSubmission, StudentContact
+from .forms import AssessmentResultForm, StudentForm, SubjectAssignmentForm, AssignmentSubmissionForm, GradeAssignmentForm, StudentContactForm
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
@@ -218,3 +219,289 @@ def student_profile(request, student_id):
         'results': results,
     }
     return render(request, 'reports/student_profile.html', context)
+
+# ===== ASSIGNMENT VIEWS =====
+
+@login_required
+def assignment_list(request, grade_id=None, subject_id=None):
+    # Teachers see assignments they created, students/parents see published assignments
+    if request.user.is_teacher():
+        assignments = SubjectAssignment.objects.filter(created_by=request.user)
+    else:
+        assignments = SubjectAssignment.objects.filter(is_published=True)
+    
+    # Get current academic year
+    current_year = AcademicYear.objects.filter(current=True).first()
+    if current_year:
+        assignments = assignments.filter(academic_year=current_year)
+    
+    # Filter by subject if provided
+    if subject_id:
+        subject = get_object_or_404(Subject, id=subject_id)
+        assignments = assignments.filter(subject=subject)
+    else:
+        subject = None
+    
+    # Get available subjects for filters
+    subjects = Subject.objects.all()
+    
+    context = {
+        'assignments': assignments,
+        'subject': subject,
+        'subjects': subjects,
+        'current_subject_id': subject_id,
+        'current_year': current_year,
+    }
+    return render(request, 'reports/assignment_list.html', context)
+
+@login_required
+def assignment_detail(request, assignment_id):
+    assignment = get_object_or_404(SubjectAssignment, id=assignment_id)
+    
+    # Check permissions
+    if not assignment.is_published and not request.user.is_teacher():
+        messages.error(request, "You don't have permission to view this assignment.")
+        return redirect('reports:assignment_list')
+    
+    if request.user.is_teacher() and assignment.created_by != request.user:
+        messages.error(request, "You can only view assignments you created.")
+        return redirect('reports:assignment_list')
+    
+    # Check if student has submitted this assignment
+    user_submission = None
+    if request.user.is_parent():
+        # Get the student object for this parent
+        student = Student.objects.filter(user=request.user).first()
+        if student:
+            user_submission = AssignmentSubmission.objects.filter(
+                assignment=assignment, 
+                student=student
+            ).first()
+    
+    # Get all submissions for teachers
+    submissions = None
+    if request.user.is_teacher() and assignment.created_by == request.user:
+        submissions = AssignmentSubmission.objects.filter(assignment=assignment)
+    
+    context = {
+        'assignment': assignment,
+        'user_submission': user_submission,
+        'submissions': submissions,
+    }
+    return render(request, 'reports/assignment_detail.html', context)
+
+@login_required
+def assignment_create(request):
+    if not request.user.is_teacher():
+        messages.error(request, "Only teachers can create assignments.")
+        return redirect('reports:assignment_list')
+    
+    current_year = AcademicYear.objects.filter(current=True).first()
+    if not current_year:
+        messages.error(request, "No current academic year set. Please contact administrator.")
+        return redirect('reports:assignment_list')
+    
+    if request.method == 'POST':
+        form = SubjectAssignmentForm(request.POST, request.FILES, user=request.user)
+        if form.is_valid():
+            assignment = form.save(commit=False)
+            assignment.created_by = request.user
+            assignment.academic_year = current_year
+            assignment.save()
+            messages.success(request, f'Assignment "{assignment.title}" created successfully!')
+            return redirect('reports:assignment_list')
+    else:
+        form = SubjectAssignmentForm(user=request.user)
+    
+    context = {
+        'form': form,
+        'title': 'Create New Assignment',
+        'current_year': current_year,
+    }
+    return render(request, 'reports/assignment_form.html', context)
+
+@login_required
+def assignment_edit(request, assignment_id):
+    if not request.user.is_teacher():
+        messages.error(request, "Only teachers can edit assignments.")
+        return redirect('reports:assignment_list')
+    
+    assignment = get_object_or_404(SubjectAssignment, id=assignment_id, created_by=request.user)
+    
+    if request.method == 'POST':
+        form = SubjectAssignmentForm(request.POST, request.FILES, instance=assignment, user=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Assignment "{assignment.title}" updated successfully!')
+            return redirect('reports:assignment_detail', assignment_id=assignment.id)
+    else:
+        form = SubjectAssignmentForm(instance=assignment, user=request.user)
+    
+    context = {
+        'form': form,
+        'title': 'Edit Assignment',
+        'assignment': assignment
+    }
+    return render(request, 'reports/assignment_form.html', context)
+
+@login_required
+def assignment_delete(request, assignment_id):
+    if not request.user.is_teacher():
+        messages.error(request, "Only teachers can delete assignments.")
+        return redirect('reports:assignment_list')
+    
+    assignment = get_object_or_404(SubjectAssignment, id=assignment_id, created_by=request.user)
+    
+    if request.method == 'POST':
+        title = assignment.title
+        assignment.delete()
+        messages.success(request, f'Assignment "{title}" deleted successfully!')
+        return redirect('reports:assignment_list')
+    
+    context = {
+        'assignment': assignment
+    }
+    return render(request, 'reports/assignment_confirm_delete.html', context)
+
+@login_required
+def submit_assignment(request, assignment_id):
+    if not request.user.is_parent():
+        messages.error(request, "Only students (through parent accounts) can submit assignments.")
+        return redirect('reports:assignment_list')
+    
+    assignment = get_object_or_404(SubjectAssignment, id=assignment_id, is_published=True)
+    
+    # Get the student for this parent
+    student = Student.objects.filter(user=request.user).first()
+    if not student:
+        messages.error(request, "No student profile found for your account.")
+        return redirect('reports:assignment_list')
+    
+    # Check if already submitted
+    existing_submission = AssignmentSubmission.objects.filter(assignment=assignment, student=student).first()
+    if existing_submission:
+        messages.warning(request, "You have already submitted this assignment.")
+        return redirect('reports:assignment_detail', assignment_id=assignment.id)
+    
+    if request.method == 'POST':
+        form = AssignmentSubmissionForm(request.POST, request.FILES)
+        if form.is_valid():
+            submission = form.save(commit=False)
+            submission.assignment = assignment
+            submission.student = student
+            submission.save()
+            messages.success(request, 'Assignment submitted successfully!')
+            return redirect('reports:assignment_detail', assignment_id=assignment.id)
+    else:
+        form = AssignmentSubmissionForm()
+    
+    context = {
+        'form': form,
+        'assignment': assignment,
+        'student': student,
+    }
+    return render(request, 'reports/assignment_submit.html', context)
+
+@login_required
+def grade_assignment(request, submission_id):
+    if not request.user.is_teacher():
+        messages.error(request, "Only teachers can grade assignments.")
+        return redirect('reports:assignment_list')
+    
+    submission = get_object_or_404(AssignmentSubmission, id=submission_id)
+    
+    # Check if the teacher created this assignment
+    if submission.assignment.created_by != request.user:
+        messages.error(request, "You can only grade assignments you created.")
+        return redirect('reports:assignment_list')
+    
+    if request.method == 'POST':
+        form = GradeAssignmentForm(request.POST, instance=submission)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Assignment graded for {submission.student.first_name}!')
+            return redirect('reports:assignment_detail', assignment_id=submission.assignment.id)
+    else:
+        form = GradeAssignmentForm(instance=submission)
+    
+    context = {
+        'form': form,
+        'submission': submission,
+    }
+    return render(request, 'reports/grade_assignment.html', context)
+
+# ===== STUDENT CONTACT VIEWS =====
+
+@login_required
+def student_contact_home(request):
+    """Home page for student contact system"""
+    if not request.user.is_teacher():
+        messages.error(request, 'Access denied. Teachers only.')
+        return redirect('home')
+    
+    return render(request, 'reports/student_contact_home.html')
+
+@login_required
+def student_contact_class_select(request):
+    """Page where teacher selects their class"""
+    if not request.user.is_teacher():
+        messages.error(request, 'Access denied. Teachers only.')
+        return redirect('home')
+    
+    if request.method == 'POST':
+        class_level = request.POST.get('class_level')
+        if class_level:
+            return redirect('reports:student_contact_form', class_level=class_level)
+    
+    return render(request, 'reports/student_contact_class_select.html')
+
+@login_required
+def student_contact_form(request, class_level):
+    """Form for entering student contact details"""
+    if not request.user.is_teacher():
+        messages.error(request, 'Access denied. Teachers only.')
+        return redirect('home')
+    
+    # Get the display name for the class level
+    class_display = dict(StudentContact.CLASS_LEVELS).get(class_level, class_level)
+    
+    if request.method == 'POST':
+        form = StudentContactForm(request.POST, teacher=request.user)
+        if form.is_valid():
+            student_contact = form.save()
+            if 'save_add' in request.POST:
+                messages.success(request, f'Contact information for {student_contact.child_name} saved successfully!')
+                return redirect('reports:student_contact_form', class_level=class_level)
+            else:
+                messages.success(request, f'Contact information for {student_contact.child_name} saved successfully!')
+                return redirect('reports:student_contact_list')
+    else:
+        form = StudentContactForm(initial={'class_level': class_level}, teacher=request.user)
+    
+    context = {
+        'form': form,
+        'class_level': class_level,
+        'class_display': class_display,
+    }
+    return render(request, 'reports/student_contact_form.html', context)
+
+@login_required
+def student_contact_list(request):
+    """View for teachers to see all their student contacts"""
+    if not request.user.is_teacher():
+        messages.error(request, 'Access denied. Teachers only.')
+        return redirect('home')
+    
+    contacts = StudentContact.objects.filter(teacher=request.user)
+    
+    # Filter by class level if provided
+    class_level = request.GET.get('class_level')
+    if class_level:
+        contacts = contacts.filter(class_level=class_level)
+    
+    context = {
+        'contacts': contacts,
+        'class_levels': StudentContact.CLASS_LEVELS,
+        'current_class': class_level,
+    }
+    return render(request, 'reports/student_contact_list.html', context)

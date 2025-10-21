@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Select Class - Student Contact{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0 text-center">
+                    <i class="fas fa-chalkboard me-2"></i>Select Your Class
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <p class="lead">Choose the class you want to enter student contact information for:</p>
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-4">
+                        <label for="class_level" class="form-label h5">Class Level:</label>
+                        <select name="class_level" id="class_level" class="form-select form-select-lg" required>
+                            <option value="">Select Class Level</option>
+                            <option value="pp1">Pre-Primary 1 (PP1)</option>
+                            <option value="pp2">Pre-Primary 2 (PP2)</option>
+                            <option value="grade1">Grade 1</option>
+                            <option value="grade2">Grade 2</option>
+                            <option value="grade3">Grade 3</option>
+                            <option value="grade4">Grade 4</option>
+                            <option value="grade5">Grade 5</option>
+                            <option value="grade6">Grade 6</option>
+                            <option value="grade7">Grade 7</option>
+                            <option value="grade8">Grade 8</option>
+                        </select>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-arrow-right me-2"></i>Continue to Data Entry
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="mt-4 text-center">
+                    <a href="{% url 'reports:student_contact_home' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+@media (max-width: 768px) {
+    .form-select-lg {
+        font-size: 1rem;
+        padding: 0.75rem;
+    }
+    
+    .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-size: 1.1rem;
+    }
+}
+
+.form-select:focus {
+    border-color: #4361ee;
+    box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.25);
+}
+</style>
+{% endblock %}

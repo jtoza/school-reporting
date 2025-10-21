@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - Assignments{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    <i class="fas fa-{% if assignment %}edit{% else %}plus{% endif %} me-2"></i>
+                    {{ title }}
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.title.id_for_label }}" class="form-label">Assignment Title *</label>
+                            <input type="text" name="title" class="form-control" id="{{ form.title.id_for_label }}" 
+                                   value="{{ form.title.value|default:'' }}" required>
+                            {% if form.title.errors %}
+                            <div class="text-danger small">{{ form.title.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.subject.id_for_label }}" class="form-label">Subject *</label>
+                            <select name="subject" class="form-select" id="{{ form.subject.id_for_label }}" required>
+                                <option value="">Select Subject</option>
+                                {% for subject in form.subject.field.queryset %}
+                                <option value="{{ subject.id }}" {% if form.subject.value == subject.id %}selected{% endif %}>
+                                    {{ subject.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            {% if form.subject.errors %}
+                            <div class="text-danger small">{{ form.subject.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.assignment_type.id_for_label }}" class="form-label">Assignment Type</label>
+                            <select name="assignment_type" class="form-select" id="{{ form.assignment_type.id_for_label }}">
+                                {% for value, label in form.assignment_type.field.choices %}
+                                <option value="{{ value }}" {% if form.assignment_type.value == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            {% if form.assignment_type.errors %}
+                            <div class="text-danger small">{{ form.assignment_type.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.max_points.id_for_label }}" class="form-label">Maximum Points</label>
+                            <input type="number" name="max_points" class="form-control" id="{{ form.max_points.id_for_label }}" 
+                                   value="{{ form.max_points.value|default:'100' }}" min="1" max="1000" required>
+                            {% if form.max_points.errors %}
+                            <div class="text-danger small">{{ form.max_points.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.due_date.id_for_label }}" class="form-label">Due Date & Time *</label>
+                        <input type="datetime-local" name="due_date" class="form-control" id="{{ form.due_date.id_for_label }}" 
+                               value="{{ form.due_date.value|date:'Y-m-d\TH:i' }}" required>
+                        {% if form.due_date.errors %}
+                        <div class="text-danger small">{{ form.due_date.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">Description *</label>
+                        <textarea name="description" class="form-control" id="{{ form.description.id_for_label }}" 
+                                  rows="4" required>{{ form.description.value|default:'' }}</textarea>
+                        {% if form.description.errors %}
+                        <div class="text-danger small">{{ form.description.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.instructions.id_for_label }}" class="form-label">Instructions</label>
+                        <textarea name="instructions" class="form-control" id="{{ form.instructions.id_for_label }}" 
+                                  rows="3">{{ form.instructions.value|default:'' }}</textarea>
+                        {% if form.instructions.errors %}
+                        <div class="text-danger small">{{ form.instructions.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Provide specific instructions for completing the assignment.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.attachment.id_for_label }}" class="form-label">Attachment</label>
+                        <input type="file" name="attachment" class="form-control" id="{{ form.attachment.id_for_label }}" 
+                               accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png">
+                        {% if form.attachment.errors %}
+                        <div class="text-danger small">{{ form.attachment.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Upload any relevant files (PDF, Word, Excel, images). Max 10MB.</div>
+                        
+                        {% if assignment and assignment.attachment %}
+                        <div class="mt-2">
+                            <small>Current file: 
+                                <a href="{{ assignment.attachment.url }}" target="_blank">{{ assignment.attachment.name }}</a>
+                            </small>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="is_published" 
+                                   id="{{ form.is_published.id_for_label }}" 
+                                   {% if form.is_published.value %}checked{% endif %}>
+                            <label class="form-check-label" for="{{ form.is_published.id_for_label }}">
+                                Publish Assignment
+                            </label>
+                        </div>
+                        <div class="form-text">If unpublished, only you (the teacher) can see this assignment.</div>
+                    </div>
+                    
+                    {% if current_year %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        This assignment will be created for the <strong>{{ current_year.name }}</strong> academic year.
+                    </div>
+                    {% endif %}
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{% if assignment %}{% url 'reports:assignment_detail' assignment.id %}{% else %}{% url 'reports:assignment_list' %}{% endif %}" 
+                           class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>
+                            {% if assignment %}Update Assignment{% else %}Create Assignment{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
