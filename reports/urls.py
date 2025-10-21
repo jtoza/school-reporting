@@ -22,9 +22,9 @@ urlpatterns = [
     path('assignments/<int:assignment_id>/submit/', views.submit_assignment, name='submit_assignment'),
     path('submissions/<int:submission_id>/grade/', views.grade_assignment, name='grade_assignment'),
     
-    # Student Contact URLs
+    # Student Contact URLs - FIXED ORDER
     path('student-contact/', views.student_contact_home, name='student_contact_home'),
     path('student-contact/select-class/', views.student_contact_class_select, name='student_contact_class_select'),
-    path('student-contact/<str:class_level>/', views.student_contact_form, name='student_contact_form'),
-    path('student-contact/list/', views.student_contact_list, name='student_contact_list'),
+    path('student-contact/list/', views.student_contact_list, name='student_contact_list'),  # MOVED UP
+    path('student-contact/<str:class_level>/', views.student_contact_form, name='student_contact_form'),  # MOVED DOWN
 ]
